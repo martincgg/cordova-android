@@ -43,7 +43,7 @@ public class Config {
 
     private Whitelist whitelist = new Whitelist();
     private String startUrl;
-    private CordovaWebView appView;
+    private Version cord_version;
     private static Config self = null;
 
     public static void init(Activity action) {
@@ -63,7 +63,7 @@ public class Config {
     }
 
     private Config(Activity action) {
-        LOG.i("CordovaLog", "Apache Cordova native platform version " + appView.CORDOVA_VERSION + " is starting");
+        LOG.i("CordovaLog", "Apache Cordova native platform version " + cord_version.CORDOVA_VERSION + " is starting");
         if (action == null) {
             LOG.i("CordovaLog", "There is no activity. Is this on the lock screen?");
             return;
