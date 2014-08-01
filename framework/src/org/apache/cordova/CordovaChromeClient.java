@@ -65,6 +65,9 @@ public class CordovaChromeClient extends WebChromeClient {
     // the video progress view
     private View mVideoProgressView;
     
+    //Dialogs record
+    private ArrayList<AlertDialog> dialogsManager;
+    
     // File Chooser
     public ValueCallback<Uri> mUploadMessage;
     
@@ -94,6 +97,9 @@ public class CordovaChromeClient extends WebChromeClient {
      */
     @Override
     public boolean onJsAlert(WebView view, String url, String message, final JsResult result) {
+        if (dialogsManager == null) 
+            dialogsManager = new ArrayList<AlertDialog>();
+        
         AlertDialog.Builder dlg = new AlertDialog.Builder(this.cordova.getActivity());
         dlg.setMessage(message);
         dlg.setTitle("Alert");
@@ -123,6 +129,8 @@ public class CordovaChromeClient extends WebChromeClient {
                     return true;
             }
         });
+        AlertDialog alert = dlg.create();
+        dialogsManager.add(alert);
         dlg.show();
         return true;
     }
@@ -138,6 +146,9 @@ public class CordovaChromeClient extends WebChromeClient {
      */
     @Override
     public boolean onJsConfirm(WebView view, String url, String message, final JsResult result) {
+        if (dialogsManager == null) 
+            dialogsManager = new ArrayList<AlertDialog>();
+        
         AlertDialog.Builder dlg = new AlertDialog.Builder(this.cordova.getActivity());
         dlg.setMessage(message);
         dlg.setTitle("Confirm");
@@ -172,6 +183,8 @@ public class CordovaChromeClient extends WebChromeClient {
                     return true;
             }
         });
+        AlertDialog alert = dlg.create();
+        dialogsManager.add(alert);
         dlg.show();
         return true;
     }
@@ -193,6 +206,9 @@ public class CordovaChromeClient extends WebChromeClient {
         if (handledRet != null) {
             result.confirm(handledRet);
         } else {
+            if (dialogsManager == null) 
+            dialogsManager = new ArrayList<AlertDialog>();
+            
             // Returning false would also show a dialog, but the default one shows the origin (ugly).
             final JsPromptResult res = result;
             AlertDialog.Builder dlg = new AlertDialog.Builder(this.cordova.getActivity());
@@ -216,6 +232,8 @@ public class CordovaChromeClient extends WebChromeClient {
                             res.cancel();
                         }
                     });
+            AlertDialog alert = dlg.create();
+            dialogsManager.add(alert);
             dlg.show();
         }
         return true;
@@ -328,4 +346,13 @@ public class CordovaChromeClient extends WebChromeClient {
     public ValueCallback<Uri> getValueCallback() {
         return this.mUploadMessage;
     }
+    
+    public void destroyAllDialogs(){
+        if(dialogsManager != null){
+            for (int i = 0; i < dialogsManager.size(); i++){
+                dialogsManager.get(i).cancel();
+            }
+        }
+    }
+    
 }
