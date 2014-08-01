@@ -21,6 +21,8 @@ package org.apache.cordova;
 import org.apache.cordova.CordovaInterface;
 import org.apache.cordova.LOG;
 
+import java.util.ArrayList;
+
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
