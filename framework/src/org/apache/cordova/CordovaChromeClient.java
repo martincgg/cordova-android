@@ -99,7 +99,6 @@ public class CordovaChromeClient extends WebChromeClient {
      */
     @Override
     public boolean onJsAlert(WebView view, String url, String message, final JsResult result) {
-        
         AlertDialog.Builder dlg = new AlertDialog.Builder(this.cordova.getActivity());
         dlg.setMessage(message);
         dlg.setTitle("Alert");
@@ -146,7 +145,6 @@ public class CordovaChromeClient extends WebChromeClient {
      */
     @Override
     public boolean onJsConfirm(WebView view, String url, String message, final JsResult result) {
-        
         AlertDialog.Builder dlg = new AlertDialog.Builder(this.cordova.getActivity());
         dlg.setMessage(message);
         dlg.setTitle("Confirm");
@@ -204,7 +202,6 @@ public class CordovaChromeClient extends WebChromeClient {
         if (handledRet != null) {
             result.confirm(handledRet);
         } else {
-            
             // Returning false would also show a dialog, but the default one shows the origin (ugly).
             final JsPromptResult res = result;
             AlertDialog.Builder dlg = new AlertDialog.Builder(this.cordova.getActivity());
