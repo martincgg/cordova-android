@@ -208,6 +208,8 @@ public class CordovaActivity extends Activity implements CordovaInterface {
         }
         
         loadConfig();
+        // Perform Initialization during onCreate
+        init();
     }
 
     @SuppressWarnings("deprecation")
