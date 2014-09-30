@@ -208,8 +208,6 @@ public class CordovaActivity extends Activity implements CordovaInterface {
         }
         
         loadConfig();
-        // Perform Initialization during onCreate
-        init();
     }
 
     @SuppressWarnings("deprecation")
@@ -228,17 +226,7 @@ public class CordovaActivity extends Activity implements CordovaInterface {
 
     @SuppressWarnings("deprecation")
     protected void createViews() {
-        // This builds the view.  We could probably get away with NOT having a LinearLayout, but I like having a bucket!
-        // This builds the view.  We could probably get away with NOT having a LinearLayout, but I like having a bucket!
-        Display display = getWindowManager().getDefaultDisplay();
-        int width = display.getWidth();
-        int height = display.getHeight();
-
-        root = new LinearLayoutSoftKeyboardDetect(this, width, height);
-        root.setOrientation(LinearLayout.VERTICAL);
-        root.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT, 0.0F));
-
+        
         appView.setId(100);
         appView.setLayoutParams(new LinearLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
@@ -298,12 +286,8 @@ public class CordovaActivity extends Activity implements CordovaInterface {
     public void init() {
         this.init(appView, null, null);
     }
-
-    @SuppressLint("NewApi")
-    @Deprecated // Call init() instead and override makeWebView() to customize.
-    public void init(CordovaWebView webView, CordovaWebViewClient webViewClient, CordovaChromeClient webChromeClient) {
-        LOG.d(TAG, "CordovaActivity.init()");
-
+    
+    public void setConfig(){
         if(!preferences.getBoolean("ShowTitle", false))
         {
             getWindow().requestFeature(Window.FEATURE_NO_TITLE);
@@ -321,6 +305,28 @@ public class CordovaActivity extends Activity implements CordovaInterface {
             getWindow().setFlags(WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN,
                     WindowManager.LayoutParams.FLAG_FORCE_NOT_FULLSCREEN);
         }
+        
+        // This builds the view.  We could probably get away with NOT having a LinearLayout, but I like having a bucket!
+        // This builds the view.  We could probably get away with NOT having a LinearLayout, but I like having a bucket!
+        Display display = getWindowManager().getDefaultDisplay();
+        int width = display.getWidth();
+        int height = display.getHeight();
+
+        root = new LinearLayoutSoftKeyboardDetect(this, width, height);
+        root.setOrientation(LinearLayout.VERTICAL);
+        root.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT, 0.0F));
+
+        
+        // TODO: Make this a preference (CB-6153)
+        // Setup the hardware volume controls to handle volume control
+        setVolumeControlStream(AudioManager.STREAM_MUSIC);
+    }
+
+    @SuppressLint("NewApi")
+    @Deprecated // Call init() instead and override makeWebView() to customize.
+    public void init(CordovaWebView webView, CordovaWebViewClient webViewClient, CordovaChromeClient webChromeClient) {
+        LOG.d(TAG, "CordovaActivity.init()");
 
         appView = webView != null ? webView : makeWebView();
         if (appView.pluginManager == null) {
@@ -334,10 +340,6 @@ public class CordovaActivity extends Activity implements CordovaInterface {
             appView.setOverScrollMode(View.OVER_SCROLL_NEVER);
         }
         createViews();
-
-        // TODO: Make this a preference (CB-6153)
-        // Setup the hardware volume controls to handle volume control
-        setVolumeControlStream(AudioManager.STREAM_MUSIC);
     }
 
     /**
